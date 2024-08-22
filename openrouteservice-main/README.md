@@ -1,7 +1,7 @@
 # Openrouteservice
 
-[![Docker Nightly Build Status](https://img.shields.io/github/actions/workflow/status/GIScience/openrouteservice/docker-nightly-image.yml)](https://github.com/GIScience/openrouteservice/actions/workflows/docker-nightly-image.yml)
-[![Docker](https://img.shields.io/docker/cloud/build/heigit/openrouteservice?label=Docker&style=flat)](https://hub.docker.com/r/heigit/openrouteservice/builds)
+[![Docker Nightly Build Status](https://img.shields.io/github/actions/workflow/status/GIScience/openrouteservice/docker-nightly-image.yml?style=flat&label=Docker%20Nightly&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fheigit%2Fopenrouteservice%2Ftags)](https://hub.docker.com/r/heigit/openrouteservice/tags)
+[![Docker Version Status](https://img.shields.io/github/actions/workflow/status/GIScience/openrouteservice/publish-tagged-release.yml?style=flat&label=Docker%20Latest&link=https%3A%2F%2Fhub.docker.com%2Fr%2Fheigit%2Fopenrouteservice%2Ftags)](https://hub.docker.com/r/heigit/openrouteservice/tags)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GIScience_openrouteservice&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=GIScience_openrouteservice)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=GIScience_openrouteservice&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=GIScience_openrouteservice)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=GIScience_openrouteservice&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=GIScience_openrouteservice)
@@ -16,12 +16,12 @@ and provides global spatial services by consuming user-generated and collaborati
 * [Directions Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/directions/): Get directions for different modes of transport
 * [Isochrones Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/isochrones/): Obtain areas of reachability from given locations
 * [Matrix Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/matrix/): Obtain one-to-many, many-to-one and many-to-many matrices for time and distance
-* [Snapping Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/snapping/)¹: Snap coordinates to the graph edges  
+* [Snapping Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/snapping/): Snap coordinates to the road network
 * [Export Service](https://giscience.github.io/openrouteservice/api-reference/endpoints/export/)¹: Export the base graph for different modes of transport
 * [Health Endpoint](https://giscience.github.io/openrouteservice/api-reference/endpoints/health/)¹: Get information on the health of the running openrouteservice instance
 * [Status Endpoint](https://giscience.github.io/openrouteservice/api-reference/endpoints/status/)¹: Get information on the status of the openrouteservice instance
 
-¹) **Snapping, Export, Health and Status Endpoint are not available in our public openrouteservice API aka "live API"!** 
+¹) **Export, Health and Status Endpoint are not available in our public openrouteservice API aka "live API"!** 
 You can use them by running your own instance of openrouteservice.
 
 And to avoid any misunderstandings, it should also be mentioned at this point that our live API provides several other endpoints 

@@ -3,17 +3,31 @@
 
 The profiles object contains key-object-pairs for each profile you are using.
 
-Available profiles are:
-- `car`
-- `hgv`
-- `bike-regular`
-- `bike-mountain`
-- `bike-road`
-- `bike-electric`
-- `walking`
-- `hiking`
-- `wheelchair`
-- `public-transport`
+There are some default profile keys in our standard ors-config.yml with flag encoders and recommended profile-specific settings predefined. 
+These standard profiles are:
+
+| `*` in `ors.engine.profiles.*` | flag encoder `ors.engine.profiles.*.profile` |
+|--------------------------------|----------------------------------------------|
+| `car`                          | `driving-car`                                | 
+| `hgv`                          | `driving-hgv`                                | 
+| `bike-regular`                 | `cycling-regular`                            | 
+| `bike-mountain`                | `cycling-mountain`                           | 
+| `bike-road`                    | `cycling-road`                               | 
+| `bike-electric`                | `cycling-electric`                           | 
+| `walking`                      | `foot-car`                                   | 
+| `hiking`                       | `foot-hgv`                                   | 
+| `wheelchair`                   | `wheelchair`                                 | 
+| `public-transport`             | `public-transport`                           | 
+
+::: warning
+The predefined settings override settings specified in the `profile_default` in your ors-config.yml or ors-config.env!   
+If you want to specify your own profile settings based on your specific `profile_default` values, you can work around this by naming your profile differently, e.g. `custom-car` instead of `car`. 
+Note that the profile name can be chosen freely but cannot contain special characters that cannot be used for directory names on your operating system. 
+:::
+
+::: warning
+In the directions endpoint, the profiles are addressed by their encoder name (e.g. `driving-car`)!
+:::
 
 Properties for each (enabled) profile are set under `ors.engine.profiles.<profile>`, e.g.
 - `ors.engine.profiles.car`
@@ -21,7 +35,7 @@ Properties for each (enabled) profile are set under `ors.engine.profiles.<profil
 
 | key                                 | type    | description                                                                                                                                                                                                                                                                                                                                                       | default value |
 |-------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| profile                             | string  | Profile name                                                                                                                                                                                                                                                                                                                                                      | _NA_          |
+| profile                             | string  | Profile name for the directions endpoint. Also used as specification for the flag encoder during graph building. Possible values are restricted to those in the second column in above table!                                                                                                                                                                     | _NA_          |
 | enabled                             | boolean | Enables or disables the profile across **openrouteservice** endpoints                                                                                                                                                                                                                                                                                             | `true`        |
 | elevation                           | boolean | Specifies whether to use or not elevation data                                                                                                                                                                                                                                                                                                                    | `false`       |
 | elevation_smoothing                 | boolean | Smooth out elevation data                                                                                                                                                                                                                                                                                                                                         | `false`       |
@@ -30,7 +44,7 @@ Properties for each (enabled) profile are set under `ors.engine.profiles.<profil
 | instructions                        | boolean | Specifies whether way names will be stored during the import or not                                                                                                                                                                                                                                                                                               | `true`        |
 | optimize                            | boolean | Optimize the sort order when contracting nodes for CH. This is rather expensive, but yields a better contraction hierarchy.                                                                                                                                                                                                                                       | `false`       |
 | graph_path                          | string  | Subdirectory name under `ors.engine.graphs_root_path`. If left unset, the profile entry name on the `profiles` list is used                                                                                                                                                                                                                                       | _NA_          |
-| encoder_options                     | string  | For details see [encoder_options](#encoder-options) below                                                                                                                                                                                                                                                                                                         |               |
+| encoder_options                     | string  | For details see [encoder_options](#encoder_options) below                                                                                                                                                                                                                                                                                                         |               |
 | preparation                         | object  | [Preparation settings](#preparation) for building the routing graphs                                                                                                                                                                                                                                                                                              |               |
 | execution                           | object  | [Execution settings](#execution) relevant when querying services                                                                                                                                                                                                                                                                                                  |               |
 | ext_storages                        | object  | [External storages](#ext_storages) for returning extra information                                                                                                                                                                                                                                                                                                |               |
@@ -53,15 +67,15 @@ Properties for each (enabled) profile are set under `ors.engine.profiles.<profil
 
 Properties beneath `ors.engine.profiles.*.encoder_options`:
 
-| key                      | type    | profiles         | description                                                                                                                                                                                                                   | example value |
-|--------------------------|---------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| block_fords              | boolean | *                | Do not route through fords.                                                                                                                                                                                                   | `true`        |
-| consider_elevation       | boolean | bike-*           | The maximum possible speed is the bike-type specific maximum downhill speed, which is higher than the usual maximum speed.                                                                                                    | `true`        |
-| maximum_grade_level      | number  | car, hgv         | Relates to the quality of tracks as described in [tracktype](https://wiki.openstreetmap.org/wiki/Key:tracktype). Specifying e.g. maximum_grade_level=1 means that tracktype=grade2 and below won't be considered for routing. | `3`           |
-| preferred_speed_factor   | number  | wheelchair       | Travel speeds on edges classified as preferable for wheelchair users are multiplied by this factor, use to set faster traveling speeds on such ways                                                                           | `1.2`         |
-| problematic_speed_factor | number  | wheelchair       | Travel speeds on edges classified as problematic for wheelchair users are multiplied by this factor, use to set slow traveling speeds on such ways                                                                            | `0.7`         |
-| turn_costs               | boolean | car, hgv, bike-* | Should turn restrictions be respected.                                                                                                                                                                                        | `true`        |
-| use_acceleration         | boolean | car, hgv         | Models how a vehicle would accelerate on the road segment to the maximum allowed speed. In practice it reduces speed on shorter road segments such as ones between nearby intersections in a city.                            | `true`        |
+| key                      | type    | profiles         | description                                                                                                                                                                                                                                                                                                                                                                                                      | example value |
+|--------------------------|---------|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| block_fords              | boolean | *                | Do not route through fords                                                                                                                                                                                                                                                                                                                                                                                       | `true`        |
+| consider_elevation       | boolean | bike-*           | The maximum possible speed is the bike-type specific maximum downhill speed, which is higher than the usual maximum speed                                                                                                                                                                                                                                                                                        | `true`        |
+| maximum_grade_level      | number  | car, hgv         | Relates to the quality of tracks as described in [tracktype](https://wiki.openstreetmap.org/wiki/Key:tracktype). Specifying e.g. `maximum_grade_level=1` means that `tracktype=grade2` and below won't be considered for routing. Setting `maximum_grade_level=0` discards all tracks with a valid `tracktype` tag, while a negative value such as `maximum_grade_level=-1` entirely disables routing on tracks. | `3`           |
+| preferred_speed_factor   | number  | wheelchair       | Travel speeds on edges classified as preferable for wheelchair users are multiplied by this factor, use to set faster traveling speeds on such ways                                                                                                                                                                                                                                                              | `1.2`         |
+| problematic_speed_factor | number  | wheelchair       | Travel speeds on edges classified as problematic for wheelchair users are multiplied by this factor, use to set slow traveling speeds on such ways                                                                                                                                                                                                                                                               | `0.7`         |
+| turn_costs               | boolean | car, hgv, bike-* | Should turn restrictions be respected                                                                                                                                                                                                                                                                                                                                                                            | `true`        |
+| use_acceleration         | boolean | car, hgv         | Models how a vehicle would accelerate on the road segment to the maximum allowed speed. In practice it reduces speed on shorter road segments such as ones between nearby intersections in a city                                                                                                                                                                                                                | `true`        |
 
 ## preparation
 
@@ -113,6 +127,17 @@ Properties beneath `ors.engine.profiles.*.preparation.methods.core`:
 
 Properties beneath `ors.engine.profiles.*.execution` are relevant when querying services.
 
+### methods.astar
+
+Parameters for beeline approximation in the A* routing algorithm.
+
+Properties beneath `ors.engine.profiles.*.execution.methods.astar`:
+
+| key           | type   | description                                                                                                                                 | default value           |
+|---------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------|-------------------------| 
+| approximation | string | Method to use for distance approximation. Can be either the faster `BeelineSimplification` or the more precise but slower `BeelineAccurate` | `BeelineSimplification` |
+| epsilon       | number | Factor to use for distance approximation                                                                                                    | `1`                     |
+
 ### methods.lm
 
 Settings for using landmarks in routing.
@@ -156,7 +181,7 @@ Properties beneath `ors.engine.profiles.*.ext_storages`:
 | Borders                | object | Borders allows the restriction of routes to not cross country borders, compatible for any profile type                       | [Borders](#borders)                               |
 
 
-Have a look at [this table](/api-reference/endpoints/directions/extra-info/index.md#extra-info-availability) to check which external storages are enabled for the which profile by default.
+Have a look at [this table](../../../../api-reference/endpoints/directions/extra-info/index.md#extra-info-availability) to check which external storages are enabled for the which profile by default.
 
 
 ### RoadAccessRestrictions

@@ -22,19 +22,69 @@ This is how a Changelog entry should look like:
 - in case of vulnerabilities. (Use for vulnerability fixes)
 
 RELEASING:
-1. Change Unreleased to new release number
+1. Change unreleased to new release number
 2. Add today's Date
 3. Change unreleased link to compare new release:
 [unreleased]: https://github.com/GIScience/openrouteservice/compare/vnew...HEAD
 4. Add new compare link below
 [new]: https://github.com/GIScience/openrouteservice/compare/vlast...vnew
-5. Git tag release commit with vX.X.X to enable links
-6. Double check issue links are valid
-7. Bump version in pom.xml
- -->
+5. Double check issue links are valid
+6. Add [unreleased] section with all subsections as above
+7. Adding the corresponding tag is done when releasing via GitHub.
+-->
 
-## [Unreleased]
+## [unreleased]
 
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [8.1.2] - 2024-08-13
+
+### Changed
+- updated dependencies: guava, commons, rest-assured etc. ([#1831](https://github.com/GIScience/openrouteservice/pull/1831))
+- updated dependencies: spring, swagger, geotools etc. ([#1827](https://github.com/GIScience/openrouteservice/pull/1827))
+### Fixed
+- allow any number of csv columns ([#1436](https://github.com/GIScience/openrouteservice/issues/1436))
+
+## [8.1.1] - 2024-07-17
+### Added
+- added danish tranlations ([#1809](https://github.com/GIScience/openrouteservice/pull/1809))
+### Fixed
+- allow bikes on highways under construction if access is explicitly set ([#1805](https://github.com/GIScience/openrouteservice/pull/1805))
+
+## [8.1.0] - 2024-06-05
+### Added
+- document which values of OSM tag `surface` are considered for way surface categories ([#1794](https://github.com/GIScience/openrouteservice/pull/1794))
+- config parameter `maximum_locations` to snapping endpoint ([#1796](https://github.com/GIScience/openrouteservice/pull/1796))
+### Changed
+- determine way surface based only on the value of OSM tag `surface`; if the tag is not present, the surface is reported as "Unknown" and no longer inferred from the way type ([#1794](https://github.com/GIScience/openrouteservice/pull/1794))
+- improved performance of RPHAST matrix queries in the case when the number of sources is higher than the number of destinations ([#1795](https://github.com/GIScience/openrouteservice/pull/1795))
+- revise snap endpoint error codes ([#1796](https://github.com/GIScience/openrouteservice/pull/1796))
+- refactor: Cleanup routing profile management ([#1790](https://github.com/GIScience/openrouteservice/pull/1790))
+### Removed
+- merge way surface categories "Fine gravel", "Cobblestone" and "Woodchips" with existing ones "Gravel", "Paving stones" and "Unpaved", respectively ([#1794](https://github.com/GIScience/openrouteservice/pull/1794))
+### Fixed
+- reliable encoding of way type and surface ([#1794](https://github.com/GIScience/openrouteservice/pull/1794))
+
+## [8.0.1] - 2024-05-14
+### Added
+- documentation for A* config parameters ([#1759](https://github.com/GIScience/openrouteservice/pull/1759))
+- documentation for non-positive values of `maximum_grade_level` encoder config parameter ([#1775](https://github.com/GIScience/openrouteservice/pull/1775))
+- keep-alive-timeout for spring internal tomcat ([#1780](https://github.com/GIScience/openrouteservice/pull/1780))
+
+### Fixed
+- preparation mode exiting with code 0 on fail ([#1772](https://github.com/GIScience/openrouteservice/pull/1772))
+- some more properties can be defined in a user's ors-config.yml/env ors.engine.profile_default without side effects (Issue [#1762](https://github.com/GIScience/openrouteservice/issues/1762))
+- relative links in documentation markdown sources ([#1791](https://github.com/GIScience/openrouteservice/pull/1791))
+
+### Security
+- Fix CVEs GHSA-hgjh-9rj2-g67j, GHSA-ccgv-vj62-xf9h, GHSA-7w75-32cg-r6g2, GHSA-v682-8vv8-vpwr ([#1788](https://github.com/GIScience/openrouteservice/pull/1788))
+
+## [8.0.0] - 2024-03-21
 ### Added
 - snapping service endpoints for returning nearest points on the graph ([#1519](https://github.com/GIScience/openrouteservice/issues/1519))
 - workflow for RPM packaging ([#1490](https://github.com/GIScience/openrouteservice/pull/1490))
@@ -111,6 +161,7 @@ RELEASING:
 - fix isochrones snapping ([#1566](https://github.com/GIScience/openrouteservice/pull/1566))
 - fix fast-isochrones snapping ([#1572](https://github.com/GIScience/openrouteservice/pull/1572))
 - endpoint property 'isochrone' to 'isochrones' ([#1683](https://github.com/GIScience/openrouteservice/pull/1683))
+- correctly resolve access to ways with `hgv=delivery` tag ([#1748](https://github.com/GIScience/openrouteservice/pull/1748))
 
 ## [7.1.1] - 2023-11-13
 ### Changed
@@ -740,7 +791,12 @@ are attached to roads. ([Issue #162](https://github.com/GIScience/openrouteservi
 - Fix bug in RPHAST when location lies on a oneway road.
 - Consider turn restrictions if optimized=false is passed.
 
-[unreleased]: https://github.com/GIScience/openrouteservice/compare/v7.1.1...HEAD
+[unreleased]: https://github.com/GIScience/openrouteservice/compare/v8.1.2...HEAD
+[8.1.2]: https://github.com/GIScience/openrouteservice/compare/v8.1.1...v8.1.2
+[8.1.1]: https://github.com/GIScience/openrouteservice/compare/v8.1.0...v8.1.1
+[8.1.0]: https://github.com/GIScience/openrouteservice/compare/v8.0.1...v8.1.0
+[8.0.1]: https://github.com/GIScience/openrouteservice/compare/v8.0.0...v8.0.1
+[8.0.0]: https://github.com/GIScience/openrouteservice/compare/v7.1.1...v8.0.0
 [7.1.1]: https://github.com/GIScience/openrouteservice/compare/v7.1.0...v7.1.1
 [7.1.0]: https://github.com/GIScience/openrouteservice/compare/v7.0.1...v7.1.0
 [7.0.1]: https://github.com/GIScience/openrouteservice/compare/v7.0.0...v7.0.1

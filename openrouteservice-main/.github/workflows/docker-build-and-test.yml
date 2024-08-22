@@ -116,10 +116,13 @@ jobs:
           cache-from: type=gha
       - name: Start container from previously build image and wait for successful checks
         run: |
-          mkdir -p $(pwd)/graphs $(pwd)/config
-          chown -R $UID $(pwd)/graphs $(pwd)/config
+          mkdir -p $(pwd)/graphs $(pwd)/config ./ors-docker/elevation_cache
+          chown -R $UID $(pwd)/graphs $(pwd)/config ./ors-docker ./ors-docker/elevation_cache
+          # Place cached elevation file where docker compose expects it to mount into the image 
+          cp ors-api/src/test/files/elevation/srtm_38_03.gh ./ors-docker/elevation_cache
           # Replace image: in the docker-compose.yml with the test image. The value of image: can vary.
           sed -i "s|image:.*|image: ${{ needs.prepare_environment.outputs.test_image_name }}|" docker-compose.yml
+          sed -i "s|#logging.level.org.heigit: INFO|logging.level.org.heigit: DEBUG|" docker-compose.yml
           # Start the first build with the docker-compose setup
           docker compose up --build -d
           # Wait for all logs to come in
@@ -129,7 +132,7 @@ jobs:
           # Stop the compose setup and continue with docker run
           docker compose down
           # Start the container with the test image and the raw docker run command
-          docker run -it --user $UID -d -p 8080:8082 -v $(pwd)/graphs:/home/ors/graphs -v $(pwd)/config:/home/ors/config --name ors-instance ${{ needs.prepare_environment.outputs.test_image_name }}
+          docker run -it --user $UID -d -p 8080:8082 -v $(pwd)/graphs:/home/ors/graphs -v $(pwd)/config:/home/ors/config -v $(pwd)/ors-api/src/test/files/elevation:/home/ors/elevation_cache --name ors-instance ${{ needs.prepare_environment.outputs.test_image_name }}
           # Check for health to turn 200 after the graphs are build and spring-boot completely started
           ./.github/utils/url_check.sh 127.0.0.1 8080 /ors/v2/health 200 ${{ env.HEALTH_WAIT_TIME }}
           # Check for correct preflight settings to avoid CORS issues with ORIGIN wildcard from the example config
